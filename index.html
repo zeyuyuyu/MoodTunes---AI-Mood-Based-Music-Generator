@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodTunes - AI Music Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #111;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .mood-board {
+            width: 80vmin;
+            height: 80vmin;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+        }
+        
+        #mood-canvas {
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+        }
+        
+        .controls {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        button {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #444;
+            transform: translateY(-2px);
+        }
+        
+        .playing {
+            background: #0f0;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>MoodTunes</h1>
+        <p>Move your cursor to create AI-generated music based on your mood</p>
+    </div>
+    
+    <div class="mood-board">
+        <canvas id="mood-canvas"></canvas>
+    </div>
+    
+    <div class="controls">
+        <button id="play-btn">▶ Play</button>
+        <button id="save-btn">💾 Save Tune</button>
+        <button id="share-btn">🔗 Share</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('mood-canvas');
+        const ctx = canvas.getContext('2d');
+        const playBtn = document.getElementById('play-btn');
+        let isPlaying = false;
+
+        // Setup canvas
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Initialize Tone.js
+        const synth = new Tone.PolySynth(Tone.Synth).toDestination();
+        const notes = ['C4', 'D4', 'E4', 'G4', 'A4', 'C5'];
+
+        // Draw mood board gradient
+        function drawMoodBoard() {
+            const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, '#ff0000');   // Angry/Energetic
+            gradient.addColorStop(0.25, '#ffff00'); // Happy
+            gradient.addColorStop(0.5, '#00ff00');  // Peaceful
+            gradient.addColorStop(0.75, '#0000ff'); // Sad
+            gradient.addColorStop(1, '#ff00ff');    // Dreamy
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Generate music based on position
+        function generateMusic(x, y) {
+            const xRatio = x / canvas.width;
+            const yRatio = y / canvas.height;
+            
+            const note = notes[Math.floor(xRatio * notes.length)];
+            const velocity = 1 - yRatio;
+            
+            synth.triggerAttackRelease(note, '8n', undefined, velocity);
+        }
+
+        // Event listeners
+        canvas.addEventListener('mousemove', (e) => {
+            if (isPlaying) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                generateMusic(x, y);
+            }
+        });
+
+        playBtn.addEventListener('click', () => {
+            if (!isPlaying) {
+                Tone.start();
+                isPlaying = true;
+                playBtn.textContent = '⏸ Pause';
+                playBtn.classList.add('playing');
+            } else {
+                isPlaying = false;
+                playBtn.textContent = '▶ Play';
+                playBtn.classList.remove('playing');
+            }
+        });
+
+        // Initial render
+        drawMoodBoard();
+    </script>
+</body>
+</html>

@@ -3,130 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MoodTunes - Share Your Musical Moods</title>
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <title>MoodTunes - Share Your Musical Mood!</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        :root { --primary: #6c63ff; --secondary: #ff6b6b; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; background: #fafafa; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .mood-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .mood-card:hover { transform: translateY(-5px); }
+        .share-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .reaction-btn {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .reaction-btn:hover { transform: scale(1.2); }
+        .streak-counter {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .mood-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        .generate-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+        }
+        .generate-btn:hover {
+            transform: scale(1.05);
+            background: var(--secondary);
+        }
+        .social-proof {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+    </style>
 </head>
-<body class="bg-gradient-to-r from-purple-500 to-pink-500 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-white mb-2 animate__animated animate__pulse animate__infinite">MoodTunes</h1>
-            <p class="text-xl text-white">Your AI-Powered Musical Mood Journal</p>
-            <div class="streak-counter mt-4 bg-white bg-opacity-20 rounded-full px-4 py-2 inline-block">
-                <span class="text-white">🔥 Day Streak: <span id="streakCount">0</span></span>
+<body>
+    <div class="streak-counter">
+        🔥 3 Day Streak! Keep it up!
+    </div>
+    
+    <div class="container">
+        <h1>🎵 MoodTunes</h1>
+        <input type="text" class="mood-input" placeholder="How are you feeling right now? (e.g., energetic, melancholic, peaceful)">
+        <button class="generate-btn">Generate My Mood Playlist 🎶</button>
+        
+        <div class="mood-card animate__animated animate__fadeIn">
+            <h3>Sarah's Evening Vibe 🌙</h3>
+            <p>Feeling: Peaceful & Reflective</p>
+            <div class="playlist-preview">
+                <p>🎵 Weightless - Marconi Union</p>
+                <p>🎵 River Flows in You - Yiruma</p>
+                <p>🎵 Clair de Lune - Debussy</p>
+            </div>
+            <div class="share-section">
+                <button class="reaction-btn">❤️ 234</button>
+                <button class="reaction-btn">✨ 89</button>
+                <button class="reaction-btn">🎯 Perfect Match!</button>
+                <button class="share-btn">Share to Stories 📱</button>
             </div>
         </div>
-
-        <div class="bg-white rounded-lg shadow-xl p-6 max-w-md mx-auto mb-8">
-            <div class="mood-story mb-6">
-                <div class="text-lg font-semibold mb-2">How are you feeling today?</div>
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <button onclick="selectMood('Happy')" class="mood-btn p-4 bg-yellow-100 rounded-lg hover:bg-yellow-200 transition-all transform hover:scale-105">😊 Happy</button>
-                    <button onclick="selectMood('Sad')" class="mood-btn p-4 bg-blue-100 rounded-lg hover:bg-blue-200 transition-all transform hover:scale-105">😢 Sad</button>
-                    <button onclick="selectMood('Energetic')" class="mood-btn p-4 bg-red-100 rounded-lg hover:bg-red-200 transition-all transform hover:scale-105">⚡ Energetic</button>
-                    <button onclick="selectMood('Chill')" class="mood-btn p-4 bg-green-100 rounded-lg hover:bg-green-200 transition-all transform hover:scale-105">😌 Chill</button>
-                </div>
+        
+        <div class="mood-card animate__animated animate__fadeIn">
+            <h3>Mike's Workout Mix 💪</h3>
+            <p>Feeling: Energetic & Motivated</p>
+            <div class="playlist-preview">
+                <p>🎵 Till I Collapse - Eminem</p>
+                <p>🎵 Stronger - Kanye West</p>
+                <p>🎵 Eye of the Tiger - Survivor</p>
             </div>
-
-            <div id="moodStory" class="hidden">
-                <textarea class="w-full p-3 border rounded-lg mb-4" placeholder="Share what's making you feel this way... (optional)"></textarea>
-                <button onclick="generatePlaylist()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg hover:opacity-90 transition-all transform hover:scale-105">Generate My Mood Playlist</button>
-            </div>
-        </div>
-
-        <div id="playlistResult" class="hidden bg-white rounded-lg shadow-xl p-6 max-w-md mx-auto mb-8">
-            <h3 class="text-xl font-bold mb-4">Your Mood Playlist</h3>
-            <div id="playlist" class="mb-6"></div>
-            <div class="flex space-x-4">
-                <button onclick="shareToSocial()" class="flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-all transform hover:scale-105">
-                    🌟 Share My Mood
-                </button>
-                <button onclick="saveToCollection()" class="flex-1 bg-purple-500 text-white py-2 rounded-lg hover:bg-purple-600 transition-all transform hover:scale-105">
-                    💾 Save to Collection
-                </button>
-            </div>
-        </div>
-
-        <div class="text-center">
-            <div class="inline-block bg-white bg-opacity-20 rounded-lg px-6 py-3">
-                <p class="text-white mb-2">Your Mood Stats</p>
-                <div class="grid grid-cols-2 gap-4 text-white">
-                    <div>
-                        <p class="font-bold text-2xl" id="totalMoods">0</p>
-                        <p class="text-sm">Moods Tracked</p>
-                    </div>
-                    <div>
-                        <p class="font-bold text-2xl" id="playlistsCreated">0</p>
-                        <p class="text-sm">Playlists Created</p>
-                    </div>
-                </div>
+            <div class="share-section">
+                <button class="reaction-btn">❤️ 156</button>
+                <button class="reaction-btn">🔥 45</button>
+                <button class="reaction-btn">💪 Let's Go!</button>
+                <button class="share-btn">Share to Stories 📱</button>
             </div>
         </div>
     </div>
 
+    <div class="social-proof animate__animated animate__fadeIn">
+        🎵 Alex just found their perfect mood playlist!
+    </div>
+
     <script>
-        let streak = localStorage.getItem('streak') || 0;
-        let lastLogin = localStorage.getItem('lastLogin');
-        let totalMoods = localStorage.getItem('totalMoods') || 0;
-        let playlistsCreated = localStorage.getItem('playlistsCreated') || 0;
+        // Gamification & Social Proof
+        setInterval(() => {
+            const names = ['Alex', 'Maria', 'John', 'Emma', 'James', 'Sophie'];
+            const actions = ['found their perfect mood playlist', 'shared their vibe', 'started a 5-day streak'];
+            const name = names[Math.floor(Math.random() * names.length)];
+            const action = actions[Math.floor(Math.random() * actions.length)];
+            document.querySelector('.social-proof').textContent = `🎵 ${name} just ${action}!`;
+        }, 5000);
 
-        function updateStreak() {
-            const today = new Date().toDateString();
-            if (lastLogin !== today) {
-                if (isConsecutiveDay(lastLogin)) {
-                    streak++;
-                    new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3').play();
-                    showConfetti();
-                } else {
-                    streak = 1;
-                }
-                localStorage.setItem('streak', streak);
-                localStorage.setItem('lastLogin', today);
-            }
-            document.getElementById('streakCount').textContent = streak;
-        }
-
-        function selectMood(mood) {
-            document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('ring-4'));
-            event.target.classList.add('ring-4', 'ring-purple-500');
-            document.getElementById('moodStory').classList.remove('hidden');
-            totalMoods++;
-            localStorage.setItem('totalMoods', totalMoods);
-            document.getElementById('totalMoods').textContent = totalMoods;
-        }
-
-        function generatePlaylist() {
-            playlistsCreated++;
-            localStorage.setItem('playlistsCreated', playlistsCreated);
-            document.getElementById('playlistsCreated').textContent = playlistsCreated;
-            document.getElementById('playlistResult').classList.remove('hidden');
-        }
-
-        function shareToSocial() {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'My MoodTunes Playlist',
-                    text: 'Check out my mood-based playlist on MoodTunes!',
-                    url: window.location.href
-                });
-            }
-        }
-
-        function showConfetti() {
-            // Add confetti animation here
-        }
-
-        function isConsecutiveDay(lastLogin) {
-            if (!lastLogin) return false;
-            const last = new Date(lastLogin);
-            const today = new Date();
-            const diff = (today - last) / (1000 * 60 * 60 * 24);
-            return diff <= 1;
-        }
-
-        updateStreak();
-        document.getElementById('totalMoods').textContent = totalMoods;
-        document.getElementById('playlistsCreated').textContent = playlistsCreated;
+        // Like Animation
+        document.querySelectorAll('.reaction-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.add('animate__animated', 'animate__heartBeat');
+                let count = parseInt(this.textContent.match(/\\d+/)?.[0] || 0);
+                this.textContent = this.textContent.replace(/\\d+/, count + 1);
+                setTimeout(() => this.classList.remove('animate__animated', 'animate__heartBeat'), 1000);
+            });
+        });
     </script>
 </body>
 </html>
